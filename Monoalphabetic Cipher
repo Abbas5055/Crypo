@@ -1,0 +1,32 @@
+import string
+
+def monoalphabetic_cipher():
+
+    std_alphabet = string.ascii_uppercase
+    
+
+    plaintext = input("Enter Plaintext  ").upper().replace(" ", "")
+  
+    key = input("Enter 26-letter Cipher Key: ").upper()
+
+    if len(key) != 26 or len(set(key)) != 26:
+        print("Error: Key must be 26 unique characters.")
+        return
+
+    
+    encrypt_map = dict(zip(std_alphabet, key))
+    decrypt_map = dict(zip(key, std_alphabet))
+
+    
+    ciphertext = "".join(encrypt_map.get(char, char) for char in plaintext)
+    
+   
+    decrypted = "".join(decrypt_map.get(char, char) for char in ciphertext)
+
+    print(f"\nStandard: {std_alphabet}")
+    print(f"Key:      {key}")
+    print(f"Ciphertext: {ciphertext}")
+    print(f"Decrypted:  {decrypted}")
+
+
+monoalphabetic_cipher()
