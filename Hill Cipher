@@ -1,0 +1,33 @@
+import numpy as np
+
+def hill_cipher():
+   
+    pt = input("Enter Plaintext: ").upper().replace(" ", "")
+    
+  
+    print("Enter the 2x2 Matrix elements (row-wise):")
+    a = int(input("Row 1, Col 1: "))
+    b = int(input("Row 1, Col 2: "))
+    c = int(input("Row 2, Col 1: "))
+    d = int(input("Row 2, Col 2: "))
+    key = np.array([[a, b], [c, d]])
+
+
+    if len(pt) % 2 != 0:
+        pt += "X"
+
+    pt_coords = [ord(char) - 65 for char in pt]
+    pt_vectors = np.array(pt_coords).reshape(-1, 2)
+    
+    ciphertext = ""
+    for vector in pt_vectors:
+
+        result = np.dot(key, vector) % 26
+        ciphertext += "".join(chr(int(val) + 65) for val in result)
+
+    print(f"\n--- RESULTS ---")
+    print(f"Key Matrix:\n{key}")
+    print(f"Ciphertext: {ciphertext}")
+
+
+hill_cipher()
