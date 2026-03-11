@@ -1,0 +1,21 @@
+import numpy as np
+
+def polyalphabetic_vigenere():
+    pt = input("Enter Plaintext: ").upper().replace(" ", "")
+    key_word = input("Enter Key Word: ").upper().replace(" ", "")
+    
+
+    extended_key = (key_word * (len(pt) // len(key_word) + 1))[:len(pt)]
+    
+    pt_coords = np.array([ord(char) - 65 for char in pt])
+    key_coords = np.array([ord(char) - 65 for char in extended_key])
+
+    cipher_coords = (pt_coords + key_coords) % 26
+    
+    ciphertext = "".join(chr(val + 65) for val in cipher_coords)
+
+    print(f"Extended Key: {extended_key}")
+    print(f"Ciphertext:   {ciphertext}")
+
+if __name__ == "__main__":
+    polyalphabetic_vigenere()
