@@ -1,0 +1,50 @@
+import numpy as np
+
+def blowfish_f_function(xl, s_boxes):
+    """
+    The 'F' function: Splits 32-bit input into four 8-bit quarters (a,b,c,d).
+    Calculation: ((S1[a] + S2[b]) XOR S3[c]) + S4[d] (all mod 2^32).
+    """
+    a = (xl >> 24) & 0xFF
+    b = (xl >> 16) & 0xFF
+    c = (xl >> 8) & 0xFF
+    d = xl & 0xFF
+    
+    # Addition modulo 2^32
+    res = (int(s_boxes[0][a]) + int(s_boxes[1][b])) % (2**32)
+    res = res ^ int(s_boxes[2][c])
+    res = (res + int(s_boxes[3][d])) % (2**32)
+    return res
+
+def blowfish_encrypt():
+    print("--- Blowfish Encryption Simulation ---")
+    
+
+    p_array = [np.random.randint(0, 2**32) for _ in range(18)] 
+    
+    s_boxes = [np.random.randint(0, 2**32, 256) for _ in range(4)]
+    
+    try:
+        pt_l = int(input("Enter Left 32-bit half (as int): "))
+        pt_r = int(input("Enter Right 32-bit half (as int): "))
+    except ValueError:
+        print("Invalid input. Please enter integers.")
+        return
+
+    for i in range(16):
+        pt_l ^= p_array[i]
+        pt_r ^= blowfish_f_function(pt_l, s_boxes)
+        pt_l, pt_r = pt_r, pt_l 
+        
+
+    pt_l, pt_r = pt_r, pt_l
+    
+    pt_r ^= p_array[16]
+    pt_l ^= p_array[17]
+    
+    print(f"Ciphertext Left (Hex):  {hex(pt_l)}")
+    print(f"Ciphertext Right (Hex): {hex(pt_r)}")
+    print(f"Combined 64-bit:       {hex((pt_l << 32) | pt_r)}")
+
+if __name__ == "__main__":
+    blowfish_encrypt()
